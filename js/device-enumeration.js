@@ -1,6 +1,7 @@
 
 const tbody = document.getElementById('device-list');
 const itemTemplate = document.getElementById('device-item-template');
+const video = document.getElementById('video');
 
 function populateDeviceList(devices) {
 
@@ -10,7 +11,6 @@ function populateDeviceList(devices) {
     }
 
     devices.forEach(device => {
-        console.dir(device);
         const clone = itemTemplate.content.cloneNode(true);
         clone.querySelector('.device-type').textContent = device.kind ? device.kind : '<none>';
         clone.querySelector('.device-label').textContent = device.label ? device.label : '<none>';
@@ -27,7 +27,14 @@ document.getElementById('enumerate-devices').addEventListener('click', async () 
 document.getElementById('get-user-media').addEventListener('click', async () => {
     const constraints = { audio: false, video: true };
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    setTimeout(() => stream.close(), 1_000);
+
+    video.onloadedmetadata = () => {
+        video.play();
+        setTimeout(() => {
+            stream.getTracks().forEach(track => track.stop());
+        }, 1_000);
+    }
+    video.srcObject = stream;
 })
 
 
