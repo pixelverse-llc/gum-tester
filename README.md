@@ -1,2 +1,3 @@
 # gum-tester
-getUserMedia Testing App
+
+A collection of utilities for testing getUserMedia() and related APIs.
