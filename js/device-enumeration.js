@@ -1,7 +1,16 @@
-
 const tbody = document.getElementById('device-list');
 const itemTemplate = document.getElementById('device-item-template');
 const video = document.getElementById('video');
+const statusText = document.getElementById('status-text');
+
+function storeEnumeratedDevices(devices) {
+    localStorage.setItem('devices', JSON.stringify(devices));
+}
+
+function loadEnumeratedDevices() {
+    const devices = localStorage.getItem('devices');
+    return devices === null ? [] : JSON.parse(devices);
+}
 
 function populateDeviceList(devices) {
 
@@ -10,13 +19,36 @@ function populateDeviceList(devices) {
         tbody.removeChild(tbody.firstChild);
     }
 
-    devices.forEach(device => {
+    let changes = '';
+    const oldDevices = loadEnumeratedDevices();
+    for (const newDevice of devices) {
+
+        // check if this device can be found in previous devices (by ID)
+        let previousDevice = null;
+        for (const oldDevice of oldDevices) {
+            if (oldDevice.deviceId === newDevice.deviceId) {
+                previousDevice = oldDevice;
+                break;
+            }
+        }
+
+        const displayId = newDevice.deviceId ?? '<no ID>';
+        const displayLabel = newDevice.label ?? '<no label>';
+        if (previousDevice === null) {
+            changes += `New device found: ${displayLabel} (${displayId})<br>`;
+        }
+
+        // add item to table
         const clone = itemTemplate.content.cloneNode(true);
-        clone.querySelector('.device-type').textContent = device.kind ? device.kind : '<none>';
-        clone.querySelector('.device-label').textContent = device.label ? device.label : '<none>';
-        clone.querySelector('.device-id').textContent = device.deviceId ? device.deviceId : '<none>';
+        clone.querySelector('.device-type').textContent = newDevice.kind;
+        clone.querySelector('.device-label').textContent = displayLabel;
+        clone.querySelector('.device-id').textContent = displayId;
         tbody.appendChild(clone);
-    });
+    }
+
+    statusText.innerHTML = changes;
+
+    storeEnumeratedDevices(devices);
 }
 
 document.getElementById('enumerate-devices').addEventListener('click', async () => {
@@ -25,7 +57,7 @@ document.getElementById('enumerate-devices').addEventListener('click', async () 
 });
 
 document.getElementById('get-user-media').addEventListener('click', async () => {
-    const constraints = { audio: false, video: true };
+    const constraints = {audio: false, video: true};
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
     video.onloadedmetadata = () => {

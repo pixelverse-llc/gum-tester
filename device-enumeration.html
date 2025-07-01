@@ -7,6 +7,12 @@
     <script src="js/device-enumeration.js" type="module"></script>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/common.css">
+    <style>
+        #status-text {
+            color: red;
+            font-size: small;
+        }
+    </style>
 </head>
 <body>
 
@@ -24,9 +30,6 @@
         </thead>
         <tbody id="device-list">
         <!-- item templates will be instantiated here -->
-        <tr>
-            <td colspan="3">No devices enumerated yet</td>
-        </tr>
         </tbody>
 
         <template id="device-item-template">
@@ -38,10 +41,15 @@
         </template>
     </table>
 
-    <div style="margin-top: 1em">
-        <button id="enumerate-devices">Enumerate devices</button>
-        <button id="get-user-media">getUserMedia(video)</button>
-    </div>
+    <section style="margin-top: 1em">
+        <p id="status-text">No devices enumerated yet</p>
+
+        <div>
+            <button id="enumerate-devices">Enumerate devices</button>
+            <button id="get-user-media">getUserMedia(video)</button>
+        </div>
+
+    </section>
 
     <video id="video" autoplay muted></video>
 </main>
