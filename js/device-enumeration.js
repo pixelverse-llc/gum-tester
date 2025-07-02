@@ -34,7 +34,7 @@ function populateDeviceList(devices) {
         const displayId = newDevice.deviceId ?? '<no ID>';
         const displayLabel = newDevice.label ?? '<no label>';
         if (previousDevice === null) {
-            statusText = `New device found: ${displayLabel} (${displayId})<br>`;
+            statusText = `NEW device ID (${displayId.substring(0, 10)}…)`;
         }
 
         // add item to table
