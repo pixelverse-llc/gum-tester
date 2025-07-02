@@ -12,6 +12,18 @@
             color: red;
             font-size: small;
         }
+
+        .device-item {
+            margin-bottom: 1em;
+        }
+
+        .device-label {
+            font-weight: bold;
+        }
+        .device-status {
+            font-style: italic;
+            font-size: small;
+        }
     </style>
 </head>
 <body>
@@ -20,35 +32,22 @@
 
     <h1>Device Enumeration</h1>
     <p>Only videoinput (cameras) are enumerated.</p>
-    <table>
-        <thead>
-        <tr>
-            <th>Type</th>
-            <th>Label</th>
-            <th>ID</th>
-        </tr>
-        </thead>
-        <tbody id="device-list">
-        <!-- item templates will be instantiated here -->
-        </tbody>
 
-        <template id="device-item-template">
-            <tr>
-                <td class="device-type"></td>
-                <td class="device-label"></td>
-                <td class="device-id"></td>
-            </tr>
-        </template>
-    </table>
+    <section id="device-list" style="margin-top: 1em">
+        <!-- item templates will be instantiated here -->
+    </section>
+
+    <template id="device-item-template">
+        <div class="device-item">
+            <p class="device-label"></p>
+            <p class="device-id"></p>
+            <p class="device-status"></p>
+        </div>
+    </template>
 
     <section style="margin-top: 1em">
-        <p id="status-text">No devices enumerated yet</p>
-
-        <div>
-            <button id="enumerate-devices">Enumerate devices</button>
-            <button id="get-user-media">getUserMedia(video)</button>
-        </div>
-
+        <button id="enumerate-devices">Enumerate devices</button>
+        <button id="get-user-media">getUserMedia(video)</button>
     </section>
 
     <video id="video" autoplay muted></video>

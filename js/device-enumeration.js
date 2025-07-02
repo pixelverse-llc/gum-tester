@@ -1,7 +1,6 @@
-const tbody = document.getElementById('device-list');
+const deviceList = document.getElementById('device-list');
 const itemTemplate = document.getElementById('device-item-template');
 const video = document.getElementById('video');
-const statusText = document.getElementById('status-text');
 
 function storeEnumeratedDevices(devices) {
     localStorage.setItem('devices', JSON.stringify(devices));
@@ -14,12 +13,11 @@ function loadEnumeratedDevices() {
 
 function populateDeviceList(devices) {
 
-    // remove all table items
-    while (tbody.firstChild) {
-        tbody.removeChild(tbody.firstChild);
+    // remove all items
+    while (deviceList.lastChild) {
+        deviceList.removeChild(deviceList.lastChild);
     }
 
-    let changes = '';
     const oldDevices = loadEnumeratedDevices();
     for (const newDevice of devices) {
 
@@ -32,28 +30,31 @@ function populateDeviceList(devices) {
             }
         }
 
+        let statusText = '';
         const displayId = newDevice.deviceId ?? '<no ID>';
         const displayLabel = newDevice.label ?? '<no label>';
         if (previousDevice === null) {
-            changes += `New device found: ${displayLabel} (${displayId})<br>`;
+            statusText = `New device found: ${displayLabel} (${displayId})<br>`;
         }
 
         // add item to table
         const clone = itemTemplate.content.cloneNode(true);
-        clone.querySelector('.device-type').textContent = newDevice.kind;
         clone.querySelector('.device-label').textContent = displayLabel;
         clone.querySelector('.device-id').textContent = displayId;
-        tbody.appendChild(clone);
+        clone.querySelector('.device-status').textContent = statusText;
+        deviceList.appendChild(clone);
     }
-
-    statusText.innerHTML = changes;
 
     storeEnumeratedDevices(devices);
 }
 
-document.getElementById('enumerate-devices').addEventListener('click', async () => {
+async function doEnumerateDevices() {
     const devices = await navigator.mediaDevices.enumerateDevices();
     populateDeviceList(devices.filter(device => device.kind === 'videoinput'));
+}
+
+document.getElementById('enumerate-devices').addEventListener('click', async () => {
+    await doEnumerateDevices();
 });
 
 document.getElementById('get-user-media').addEventListener('click', async () => {
@@ -69,4 +70,5 @@ document.getElementById('get-user-media').addEventListener('click', async () => 
     video.srcObject = stream;
 })
 
+await doEnumerateDevices();
 
