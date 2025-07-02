@@ -33,8 +33,14 @@ function populateDeviceList(devices) {
         }
 
         let statusText = '';
-        const displayId = newDevice.deviceId ?? '<no ID>';
-        const displayLabel = newDevice.label ?? '<no label>';
+        let displayId = '<empty ID>';
+        if (newDevice.deviceId && newDevice.deviceId.length > 0) {
+            displayId = newDevice.deviceId;
+        }
+        let displayLabel = '<empty label>';
+        if (newDevice.label && newDevice.label.length > 0) {
+            displayLabel = newDevice.label;
+        }
         if (previousDevice === null) {
             statusText = `NEW device ID (${displayId.substring(0, 10)}…)`;
         }
