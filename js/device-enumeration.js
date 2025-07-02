@@ -18,6 +18,8 @@ function populateDeviceList(devices) {
         deviceList.removeChild(deviceList.lastChild);
     }
 
+    document.getElementById('device-count').textContent = `${devices.length} videoinput device(s) enumerated.`;
+
     const oldDevices = loadEnumeratedDevices();
     for (const newDevice of devices) {
 

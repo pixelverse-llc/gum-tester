@@ -8,15 +8,11 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/common.css">
     <style>
-        #status-text {
-            color: red;
-            font-size: small;
-        }
-
         .device-item {
             margin-bottom: 1em;
+            background-color: #ddd;
+            padding: 0.5em;
         }
-
         .device-label {
             font-weight: bold;
         }
@@ -31,7 +27,7 @@
 <main>
 
     <h1>Device Enumeration</h1>
-    <p>Only videoinput (cameras) are enumerated.</p>
+    <p id="device-count"></p>
 
     <section id="device-list" style="margin-top: 1em">
         <!-- item templates will be instantiated here -->
